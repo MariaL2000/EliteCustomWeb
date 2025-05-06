@@ -30,22 +30,27 @@ services:
         value: .onrender.com
     healthCheckPath: /admin/login/
 
-  # Frontend (React)
-  - type: web
-    name: EliteFrontend
-    env: node
-    plan: free
-    rootDirectory: Elite  # Carpeta donde está tu React
-    buildCommand: |
-      npm install
-      npm run build
-    startCommand: serve -s build
-    envVars:
-      - key: REACT_APP_API_URL
-        value: https://elitebackend.onrender.com  # Ajusta según el nombre de tu backend
-      - key: NODE_VERSION
-        value: 18.x
-    staticPublishPath: ./build
+
+
+
+# Frontend (Vite + React)
+- type: web
+  name: EliteFrontend
+  env: node
+  plan: free
+  rootDirectory: Elite  # Carpeta donde está tu proyecto Vite
+  buildCommand: |
+    npm install
+    npm run build
+  startCommand: |
+    npm install -g serve
+    serve -s dist
+  envVars:
+    - key: VITE_API_URL  # En Vite usa "VITE_" en lugar de "REACT_APP_"
+      value: https://elitebackend.onrender.com
+    - key: NODE_VERSION
+      value: 18.x
+  staticPublishPath: ./dist  # Vite genera archivos en /dist (no /build)
 
   # Base de datos PostgreSQL
   - type: postgresql
