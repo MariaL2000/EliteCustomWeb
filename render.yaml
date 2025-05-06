@@ -1,10 +1,12 @@
 services:
+  # Backend (Django)
   - type: web
     name: EliteBackend
     env: python
     plan: free
     rootDirectory: main_project  
-    buildCommand: pip install -r requirements.txt
+    buildCommand: |
+      pip install -r requirements.txt
     startCommand: |
       python manage.py collectstatic --noinput
       python manage.py migrate
@@ -21,13 +23,31 @@ services:
       - key: WEB_CONCURRENCY
         value: 4
       - key: DJANGO_SETTINGS_MODULE
-        value: settings
+        value: main_project.settings  # Asegúrate de que esta ruta sea correcta
       - key: DEBUG
         value: false
       - key: ALLOWED_HOSTS
         value: .onrender.com
     healthCheckPath: /admin/login/
 
+  # Frontend (React)
+  - type: web
+    name: EliteFrontend
+    env: node
+    plan: free
+    rootDirectory: Elite  # Carpeta donde está tu React
+    buildCommand: |
+      npm install
+      npm run build
+    startCommand: serve -s build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://elitebackend.onrender.com  # Ajusta según el nombre de tu backend
+      - key: NODE_VERSION
+        value: 18.x
+    staticPublishPath: ./build
+
+  # Base de datos PostgreSQL
   - type: postgresql
     name: elite
     plan: free
