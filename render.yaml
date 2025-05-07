@@ -49,10 +49,9 @@ services:
         value: 18.x
     staticPublishPath: ./dist
 
-  # Base de datos PostgreSQL
-  - type: postgresql
-    name: elite
+databases:
+  - name: elite
+    plan: free
     databaseName: elite_db
     user: elite_user
-    plan: free
     ipAllowList: []
