@@ -4,7 +4,9 @@ services:
     name: EliteBackend
     env: python
     plan: free
-    rootDirectory: main_project
+    buildFilter:
+      paths:
+        - main_project/**
     buildCommand: |
       pip install -r requirements.txt
     startCommand: |
@@ -35,7 +37,9 @@ services:
     name: EliteFrontend
     env: node
     plan: free
-    rootDirectory: Elite
+    buildFilter:
+      paths:
+        - Elite/**
     buildCommand: |
       npm install
       npm run build
