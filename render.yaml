@@ -52,5 +52,7 @@ services:
   # Base de datos PostgreSQL
   - type: postgresql
     name: elite
+    databaseName: elite_db
+    user: elite_user
     plan: free
     ipAllowList: []
